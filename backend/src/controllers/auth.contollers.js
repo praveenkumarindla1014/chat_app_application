@@ -2,48 +2,44 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
+// ✅ SIGNUP
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
 
   try {
-    // password validation
     if (password.length < 6) {
       return res.status(400).json({
         message: "Password must be at least 6 characters long",
       });
     }
 
-    // check user exists
     const user = await User.findOne({ email });
     if (user)
       return res
         .status(400)
         .json({ message: "User already exists with this email" });
 
-    // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // create user
     const newUser = new User({
       fullName,
       email,
       password: hashedPassword,
     });
 
-    if(newUser){
-        generateToken(res,newUser._id);
-        await newUser.save();
-    }
-
-    // save user
+    // ✅ Save once
     await newUser.save();
 
-    res.status(201).json({ 
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        message: "User created successfully" });
+    // ✅ Generate token
+    generateToken(res, newUser._id);
+
+    res.status(201).json({
+      _id: newUser._id,
+      fullName: newUser.fullName,
+      email: newUser.email,
+      message: "User created successfully",
+    });
 
   } catch (error) {
     console.log(error.message);
@@ -51,10 +47,62 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.send("Login route");
+// ✅ LOGIN
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // ✅ Correct query
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: "Invalid email or password" });
+    }
+
+    // ✅ Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ message: "Invalid email or password" });
+    }
+
+    // ✅ Generate token
+    generateToken(res, user._id);
+
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      message: "Login successful",
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
+// ✅ LOGOUT
 export const logout = (req, res) => {
-  res.send("Logout route");
+  try {
+    // clear cookie (if using JWT cookies)
+    res.cookie("jwt", "", { maxAge: 0 });
+
+    res.status(200).json({
+      message: "Logged out successfully",
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+    const { fullName, email } = req.body;
+    
 };
