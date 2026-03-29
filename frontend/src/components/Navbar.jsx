@@ -1,58 +1,80 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, Menu } from "lucide-react";
+import { useUIStore } from "../store/useUIStore";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const { isMobile, toggleSidebar } = useUIStore();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <header
-      className="bg-base-100/80 border-b border-base-200 fixed w-full top-0 z-40 
-    backdrop-blur-xl transition-all duration-300 shadow-sm"
-    >
-      <div className="container mx-auto px-4 h-16">
-        <div className="flex items-center justify-between h-full">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-all group">
-              <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <MessageSquare className="w-5 h-5 text-primary" />
-              </div>
-              <h1 className="text-lg font-bold tracking-tight">Chatty</h1>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Link
-              to={"/settings"}
-              className="btn btn-sm btn-ghost gap-2 hover:bg-base-200 transition-all duration-200"
+    <header className="navbar-premium fixed w-full top-0 z-50">
+      <div className="max-w-screen-2xl mx-auto px-4 h-16 flex items-center justify-between">
+        {/* Left side */}
+        <div className="flex items-center gap-3">
+          {authUser && isMobile && (
+            <button
+              onClick={toggleSidebar}
+              className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors border border-white/8"
             >
-              <Settings className="w-4 h-4 text-base-content/70" />
-              <span className="hidden sm:inline font-medium">Settings</span>
-            </Link>
+              <Menu className="w-5 h-5 text-slate-300" />
+            </button>
+          )}
 
-            {authUser && (
-              <>
-                <Link 
-                  to={"/profile"} 
-                  className="btn btn-sm btn-ghost gap-2 hover:bg-base-200 transition-all duration-200"
-                >
-                  <User className="size-5 text-base-content/70" />
-                  <span className="hidden sm:inline font-medium">Profile</span>
-                </Link>
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-shadow">
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-lg font-extrabold tracking-tight text-white">
+              Chatty
+            </span>
+          </Link>
+        </div>
 
-                <button 
-                  className="btn btn-sm btn-ghost gap-2 text-error hover:bg-error/10 transition-all duration-200" 
-                  onClick={logout}
-                >
-                  <LogOut className="size-5" />
-                  <span className="hidden sm:inline font-medium">Logout</span>
-                </button>
-              </>
-            )}
-          </div>
+        {/* Right side */}
+        <div className="flex items-center gap-1.5">
+          <Link
+            to="/settings"
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200
+              ${isActive("/settings")
+                ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/25"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/6"
+              }`}
+          >
+            <Settings className="w-4 h-4" />
+            <span className="hidden sm:inline">Settings</span>
+          </Link>
+
+          {authUser && (
+            <>
+              <Link
+                to="/profile"
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200
+                  ${isActive("/profile")
+                    ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/25"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-white/6"
+                  }`}
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">Profile</span>
+              </Link>
+
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/10 transition-all duration-200"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>
   );
 };
+
 export default Navbar;

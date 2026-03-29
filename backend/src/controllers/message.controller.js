@@ -1,70 +1,29 @@
-import User from "../models/user.model.js";
-import Message from "../models/message.model.js";
-import cloudinary from "../lib/cloudinary.js";
-export const getUserForSidebar = async (req,res) => {
-  try{
-    const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("fullName email profilePicture");
-     res.status(200).json(filteredUsers);
-  }catch(error){
-    console.error(error.message);
-    res.status(500).json({ message: "Internal server error" });
-  }
+import { messageService } from "../services/message.service.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
+export const getUserForSidebar = asyncHandler(async (req, res) => {
+  const users = await messageService.getUsersForSidebar(req.user._id);
+  res.status(200).json(users);
+});
 
-};
+export const getMessages = asyncHandler(async (req, res) => {
+  const { id: userToChatId } = req.params;
+  const { page = 1, limit = 50 } = req.query;
 
+  const result = await messageService.getMessages(req.user._id, userToChatId, {
+    page: parseInt(page),
+    limit: parseInt(limit),
+  });
 
-export const getmessages = async (req,res) => {
-    try{
-        const{id:UserToChatId} = req.params;
-        const senderId = req.user._id;
-        const messages = await Message.find({
-            $or:[
-                {senderId:senderId,receiverId:UserToChatId},
-                {senderId:UserToChatId,receiverId:senderId}
-            ] 
-        })
+  res.status(200).json(result);
+});
 
-        res.status(200).json(messages);
-    }catch(error){
-        console.error(error.message);
-        res.status(500).json({ message: "Internal server error" });
-    }
-
-            
-};
-
-export const sendMessage = async (req,res) => {
-    try{
-        const{text,image} = req.body;
-        const {id:receiverId} = req.params;
-        const senderId = req.user._id;
-          
-        let imageUrl;
-
-        if(image){
-            const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secure_url;
-        }
-
-        const newMessage = new Message({
-            sender:senderId,
-            receiverId,
-            text,
-            Image:imageUrl
-        });
-        await newMessage.save();
-
-        //to do: real time funcationallity
-        res.status(201).json(newMessage);
-
-
-    }catch(error){
-        console.error(error.message);
-        res.status(500).json({ message: "Internal server error" });
-        
-       
-        }
-};
-
+export const sendMessage = asyncHandler(async (req, res) => {
+  const { id: receiverId } = req.params;
+  const newMessage = await messageService.sendMessage(
+    req.user._id,
+    receiverId,
+    req.body
+  );
+  res.status(201).json(newMessage);
+});

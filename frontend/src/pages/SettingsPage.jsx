@@ -1,68 +1,166 @@
 import { THEMES } from "../constants";
 import { useThemeStore } from "../store/useThemeStore";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Palette } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+const THEME_LABELS = {
+  chatdark: "Chat Dark ✨",
+  dark: "Dark",
+  light: "Light",
+  night: "Night",
+  dracula: "Dracula",
+  dim: "Dim",
+  luxury: "Luxury",
+  synthwave: "Synthwave",
+};
 
 const SettingsPage = () => {
   const { theme, setTheme } = useThemeStore();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0f1c] via-[#0d1627] to-[#0a0f1c] text-slate-200 pt-24 px-4 pb-12">
-      <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
-        {/* Header Section */}
-        <div className="flex flex-col gap-2 relative">
-          <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
-          <h2 className="text-4xl font-extrabold tracking-tight text-white drop-shadow-sm">Theme Settings</h2>
-          <p className="text-blue-200/60 font-medium text-lg max-w-xl">
-            Customize your chat interface. Select from our curated list of beautiful themes below.
-          </p>
+    <div
+      className="min-h-screen pt-20 px-4 pb-12"
+      style={{ background: "#060b18" }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-3xl mx-auto space-y-8"
+      >
+        {/* Back */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-300 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to chats
+        </Link>
+
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+            <Palette className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-extrabold tracking-tight text-white">
+              Theme Settings
+            </h1>
+            <p className="text-slate-500 text-sm font-medium">
+              Customize your chat interface theme
+            </p>
+          </div>
         </div>
 
         {/* Themes Grid */}
-        <div className="bg-[#11192b]/80 backdrop-blur-xl border border-blue-900/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px] pointer-events-none" />
-          
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 relative z-10">
+        <div
+          className="p-6 rounded-2xl"
+          style={{
+            background: "rgba(13, 21, 38, 0.75)",
+            border: "1px solid rgba(99, 102, 241, 0.15)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+          }}
+        >
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">
+            Select Theme
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {THEMES.map((t) => (
-              <button
+              <motion.button
                 key={t}
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => setTheme(t)}
-                className={`
-                  group relative flex flex-col items-center gap-3 p-4 rounded-2xl transition-all duration-300
-                  ${theme === t 
-                    ? "bg-blue-600/20 border-2 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.15)] shadow-blue-500/20 translate-y-[-2px]" 
-                    : "bg-[#0a0f1c]/50 border border-slate-800/60 hover:bg-blue-900/20 hover:border-blue-700/50 hover:shadow-lg"
-                  }
-                `}
+                className="group relative flex flex-col items-center gap-3 p-4 rounded-2xl transition-all duration-200"
+                style={{
+                  background:
+                    theme === t
+                      ? "rgba(99, 102, 241, 0.15)"
+                      : "rgba(255,255,255,0.03)",
+                  border:
+                    theme === t
+                      ? "2px solid rgba(99, 102, 241, 0.5)"
+                      : "1px solid rgba(255,255,255,0.07)",
+                  boxShadow:
+                    theme === t
+                      ? "0 4px 20px rgba(99, 102, 241, 0.2)"
+                      : "none",
+                }}
               >
                 {theme === t && (
-                  <div className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full p-0.5 shadow-lg animate-bounce-short">
-                    <CheckCircle2 size={16} />
-                  </div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                  </motion.div>
                 )}
-                
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden ring-1 ring-white/10 shadow-inner" data-theme={t}>
-                  <div className="absolute inset-0 grid grid-cols-4 gap-px p-1.5 bg-black/20">
-                    <div className="rounded-sm bg-primary shadow-sm"></div>
-                    <div className="rounded-sm bg-secondary shadow-sm"></div>
-                    <div className="rounded-sm bg-accent shadow-sm"></div>
-                    <div className="rounded-sm bg-neutral shadow-sm"></div>
+
+                {/* Theme color preview */}
+                <div
+                  className="relative w-full aspect-video rounded-xl overflow-hidden shadow-inner"
+                  data-theme={t}
+                  style={{ border: "1px solid rgba(255,255,255,0.05)" }}
+                >
+                  <div className="absolute inset-0 grid grid-cols-4 gap-px p-1.5">
+                    <div className="rounded-sm bg-primary shadow-sm" />
+                    <div className="rounded-sm bg-secondary shadow-sm" />
+                    <div className="rounded-sm bg-accent shadow-sm" />
+                    <div className="rounded-sm bg-neutral shadow-sm" />
                   </div>
-                  {/* Glass overlay for depth */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                 </div>
-                
-                <span className={`text-sm font-semibold tracking-wide truncate w-full text-center transition-colors
-                  ${theme === t ? "text-blue-400" : "text-slate-400 group-hover:text-blue-300"}
-                `}>
-                  {t.charAt(0).toUpperCase() + t.slice(1)}
+
+                <span
+                  className="text-xs font-semibold truncate w-full text-center"
+                  style={{
+                    color: theme === t ? "#818cf8" : "#475569",
+                  }}
+                >
+                  {THEME_LABELS[t] || t.charAt(0).toUpperCase() + t.slice(1)}
                 </span>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
 
-      </div>
+        {/* Current theme preview */}
+        <div
+          className="p-5 rounded-2xl"
+          style={{
+            background: "rgba(13, 21, 38, 0.75)",
+            border: "1px solid rgba(99, 102, 241, 0.12)",
+          }}
+        >
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
+            Live Preview
+          </p>
+          <div data-theme={theme} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="p-4 bg-base-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-content text-xs font-bold">A</div>
+                <div>
+                  <p className="text-sm font-semibold text-base-content">Alex</p>
+                  <p className="text-xs text-base-content/40">Online</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-start">
+                  <div className="bg-base-200 text-base-content text-sm px-3 py-2 rounded-2xl max-w-xs">
+                    Hey! How are you doing? 👋
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="bg-primary text-primary-content text-sm px-3 py-2 rounded-2xl max-w-xs">
+                    I'm great! Just checking out this new theme ✨
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

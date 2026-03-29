@@ -1,4 +1,5 @@
 import { useChatStore } from "../store/useChatStore";
+import { useUIStore } from "../store/useUIStore";
 
 import Sidebar from "../components/Sidebar";
 import NoChatSelected from "../components/NoChatSelected";
@@ -6,19 +7,28 @@ import ChatContainer from "../components/ChatContainer";
 
 const HomePage = () => {
   const { selectedUser } = useChatStore();
+  const { isMobile } = useUIStore();
 
   return (
-    <div className="h-screen bg-base-200/50">
-      <div className="flex items-center justify-center pt-20 px-4">
-        <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-6xl h-[calc(100vh-8rem)] border border-base-300 overflow-hidden">
-          <div className="flex h-full overflow-hidden">
-            <Sidebar />
+    <div
+      className="h-screen pt-16"
+      style={{ background: "#060b18" }}
+    >
+      <div className="flex h-full overflow-hidden">
+        {/* Sidebar — always visible on desktop, toggleable on mobile */}
+        {(!isMobile || !selectedUser) && <Sidebar />}
 
-            {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
-          </div>
+        {/* Main Content */}
+        <div className="flex-1 flex overflow-hidden">
+          {!selectedUser ? (
+            !isMobile && <NoChatSelected />
+          ) : (
+            <ChatContainer />
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export default HomePage;

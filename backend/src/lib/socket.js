@@ -7,30 +7,56 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5174"],
+    origin: [process.env.CLIENT_URL || "http://localhost:5174"],
   },
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
+
+// userId → socketId mapping
+const userSocketMap = {};
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
 }
 
-// used to store online users
-const userSocketMap = {}; // {userId: socketId}
-
 io.on("connection", (socket) => {
-  console.log("A user connected", socket.id);
-
   const userId = socket.handshake.query.userId;
-  if (userId) userSocketMap[userId] = socket.id;
 
-  // io.emit() is used to send events to all the connected clients
-  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  if (userId && userId !== "undefined") {
+    userSocketMap[userId] = socket.id;
+    // Broadcast updated online users list
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  }
+
+  // Typing indicators
+  socket.on("typing", ({ receiverId }) => {
+    const receiverSocket = userSocketMap[receiverId];
+    if (receiverSocket) {
+      io.to(receiverSocket).emit("userTyping", { senderId: userId });
+    }
+  });
+
+  socket.on("stopTyping", ({ receiverId }) => {
+    const receiverSocket = userSocketMap[receiverId];
+    if (receiverSocket) {
+      io.to(receiverSocket).emit("userStoppedTyping", { senderId: userId });
+    }
+  });
+
+  // Read receipts
+  socket.on("markAsRead", ({ senderId }) => {
+    const senderSocket = userSocketMap[senderId];
+    if (senderSocket) {
+      io.to(senderSocket).emit("messagesRead", { readerId: userId });
+    }
+  });
 
   socket.on("disconnect", () => {
-    console.log("A user disconnected", socket.id);
-    delete userSocketMap[userId];
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    if (userId) {
+      delete userSocketMap[userId];
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    }
   });
 });
 

@@ -1,0 +1,32 @@
+
+====
+Error: Must supply api_key
+    at ensureOption (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\utils\ensureOption.js:19:13)
+    at Object.sign_request (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\utils\index.js:1154:16)
+    at Object.process_request_params (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\utils\index.js:1206:22)
+    at call_api (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\uploader.js:488:18)
+    at Object.upload (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\uploader.js:55:10)
+    at Object.upload (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\cloudinary\lib\utils\index.js:1405:21)
+    at Object.updateProfile (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/services/auth.service.js:55:54)
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/controllers/auth.controllers.js:20:41
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/utils/asyncHandler.js:6:19
+    at Layer.handle [as handle_request] (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\express\lib\router\layer.js:95:5)
+====
+
+====
+TypeError: Cannot read properties of undefined (reading 'map')
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/middleware/validate.middleware.js:10:40
+    at Layer.handle [as handle_request] (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\express\lib\router\route.js:149:13)
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/middleware/auth.middleware.js:22:3
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+====
+
+====
+TypeError: Cannot read properties of undefined (reading 'map')
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/middleware/validate.middleware.js:10:40
+    at Layer.handle [as handle_request] (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\prave\OneDrive\Desktop\practise\chat_app\backend\node_modules\express\lib\router\route.js:149:13)
+    at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/middleware/auth.middleware.js:22:3
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+====

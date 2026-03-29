@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User, Calendar, ShieldCheck } from "lucide-react";
+import { Camera, Mail, User, Calendar, Shield, ArrowLeft, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
@@ -9,10 +11,8 @@ const ProfilePage = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
-
     reader.onload = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
@@ -20,41 +20,83 @@ const ProfilePage = () => {
     };
   };
 
+  const avatarSrc = selectedImg || authUser.profilePic || authUser.profilePicture;
+  const initials = authUser.fullName?.charAt(0).toUpperCase() || "?";
+  const avatarGrad = `linear-gradient(135deg, hsl(${(authUser.fullName?.charCodeAt(0) * 7) % 360}, 70%, 40%), hsl(${(authUser.fullName?.charCodeAt(0) * 13) % 360}, 60%, 30%))`;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0f1c] via-[#0d1627] to-[#0a0f1c] pt-24 pb-12 px-4 text-slate-200">
-      <div className="max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
-        {/* Header Section */}
-        <div className="text-center space-y-2 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
-          <h1 className="text-3xl font-extrabold tracking-tight text-white drop-shadow-sm">Your Profile</h1>
-          <p className="text-blue-200/60 font-medium tracking-wide">Manage your account and personal details</p>
+    <div className="min-h-screen pt-20 pb-12 px-4" style={{ background: "#060b18" }}>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-lg mx-auto space-y-6"
+      >
+        {/* Back */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-300 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to chats
+        </Link>
+
+        {/* Header */}
+        <div className="text-center space-y-1.5">
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">
+            Your Profile
+          </h1>
+          <p className="text-slate-500 text-sm font-medium">
+            Manage your account and personal details
+          </p>
         </div>
 
         {/* Main Card */}
-        <div className="bg-[#11192b]/80 backdrop-blur-xl border border-blue-900/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
-          
-          {/* Avatar Upload Section */}
-          <div className="flex flex-col items-center gap-5 mb-10 relative z-10">
+        <div
+          className="p-8 rounded-2xl"
+          style={{
+            background: "rgba(13, 21, 38, 0.8)",
+            border: "1px solid rgba(99, 102, 241, 0.15)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+          }}
+        >
+          {/* Avatar */}
+          <div className="flex flex-col items-center gap-4 mb-8">
             <div className="relative group">
-              <div className="absolute inset-0 bg-blue-500 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <img
-                src={selectedImg || authUser.profilePic || authUser.profilePicture || "/avatar.png"}
-                alt="Profile"
-                className="relative size-24 md:size-28 rounded-full object-cover border-2 border-slate-700 shadow-xl group-hover:border-blue-500 transition-colors duration-300"
+              <div
+                className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center font-bold text-3xl text-white shadow-xl"
+                style={{
+                  background: avatarSrc ? undefined : avatarGrad,
+                  boxShadow: "0 0 40px rgba(99, 102, 241, 0.2)",
+                }}
+              >
+                {avatarSrc ? (
+                  <img src={avatarSrc} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  initials
+                )}
+              </div>
+
+              {/* Glow ring */}
+              <div
+                className="absolute inset-0 rounded-full opacity-30 blur-xl -z-10"
+                style={{ background: "rgba(99, 102, 241, 0.4)" }}
               />
+
               <label
                 htmlFor="avatar-upload"
-                className={`
-                  absolute bottom-0 right-0 
-                  bg-blue-600 hover:bg-blue-500 shadow-lg 
-                  p-2.5 rounded-full cursor-pointer 
-                  transition-all duration-300 hover:scale-110 active:scale-95
-                  ${isUpdatingProfile ? "animate-pulse pointer-events-none opacity-50" : ""}
+                className={`absolute bottom-1 right-1 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition-all
+                  ${isUpdatingProfile ? "animate-pulse opacity-50 pointer-events-none" : "hover:scale-110 active:scale-95"}
                 `}
+                style={{
+                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  boxShadow: "0 4px 12px rgba(99, 102, 241, 0.5)",
+                }}
               >
-                <Camera className="size-4 text-white" />
+                {isUpdatingProfile
+                  ? <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  : <Camera className="w-4 h-4 text-white" />
+                }
                 <input
                   type="file"
                   id="avatar-upload"
@@ -65,56 +107,94 @@ const ProfilePage = () => {
                 />
               </label>
             </div>
-            <p className="text-sm text-blue-200/50 font-medium">
-              {isUpdatingProfile ? "Uploading your new look..." : "Click the camera icon to update your photo"}
+
+            <p className="text-xs text-slate-600 font-medium">
+              {isUpdatingProfile ? "Uploading photo..." : "Click the camera icon to update"}
             </p>
           </div>
 
-          {/* User Details Form */}
-          <div className="space-y-6 relative z-10">
-            <div className="space-y-2 group">
-              <div className="text-xs font-bold text-blue-300/70 uppercase tracking-widest flex items-center gap-2 ml-1">
-                <User className="size-3.5" />
+          {/* Details */}
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-1">
+                <User className="w-3.5 h-3.5" />
                 Full Name
-              </div>
-              <div className="px-5 py-3.5 bg-[#0a0f1c]/50 rounded-xl border border-slate-800/60 text-slate-300 font-medium shadow-inner group-hover:border-blue-900/50 transition-colors">
+              </label>
+              <div
+                className="px-4 py-3 rounded-xl text-slate-200 font-medium text-sm"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
                 {authUser?.fullName}
               </div>
             </div>
 
-            <div className="space-y-2 group">
-              <div className="text-xs font-bold text-blue-300/70 uppercase tracking-widest flex items-center gap-2 ml-1">
-                <Mail className="size-3.5" />
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-1">
+                <Mail className="w-3.5 h-3.5" />
                 Email Address
-              </div>
-              <div className="px-5 py-3.5 bg-[#0a0f1c]/50 rounded-xl border border-slate-800/60 text-slate-300 font-medium shadow-inner group-hover:border-blue-900/50 transition-colors">
+              </label>
+              <div
+                className="px-4 py-3 rounded-xl text-slate-200 font-medium text-sm"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
                 {authUser?.email}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Account Meta Info */}
-        <div className="bg-[#11192b]/50 backdrop-blur-md border border-slate-800/40 rounded-2xl p-6 shadow-lg">
-          <h2 className="text-sm font-bold text-blue-200/80 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <ShieldCheck className="size-4" />
+        {/* Account Info Card */}
+        <div
+          className="p-6 rounded-2xl"
+          style={{
+            background: "rgba(13, 21, 38, 0.8)",
+            border: "1px solid rgba(99, 102, 241, 0.12)",
+          }}
+        >
+          <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Shield className="w-4 h-4" />
             Account Information
           </h2>
-          <div className="space-y-4 text-sm font-medium">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800/60">
-              <span className="text-slate-400 flex items-center gap-2"><Calendar className="size-4" /> Member Since</span>
-              <span className="text-slate-200">{authUser.createdAt?.split("T")[0] || "Just now"}</span>
+
+          <div className="space-y-4 text-sm">
+            <div
+              className="flex items-center justify-between pb-4"
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+            >
+              <span className="text-slate-500 flex items-center gap-2 font-medium">
+                <Calendar className="w-4 h-4" />
+                Member Since
+              </span>
+              <span className="text-slate-300 font-semibold">
+                {authUser.createdAt?.split("T")[0] || "Just now"}
+              </span>
             </div>
+
             <div className="flex items-center justify-between">
-              <span className="text-slate-400 flex items-center gap-2"><ShieldCheck className="size-4" /> Account Status</span>
-              <span className="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-xs font-bold tracking-wide">
+              <span className="text-slate-500 flex items-center gap-2 font-medium">
+                <Shield className="w-4 h-4" />
+                Account Status
+              </span>
+              <span
+                className="px-3 py-1 text-xs font-bold tracking-wide rounded-full"
+                style={{
+                  background: "rgba(16, 185, 129, 0.1)",
+                  color: "#10b981",
+                  border: "1px solid rgba(16, 185, 129, 0.2)",
+                }}
+              >
                 ACTIVE
               </span>
             </div>
           </div>
         </div>
-
-      </div>
+      </motion.div>
     </div>
   );
 };
