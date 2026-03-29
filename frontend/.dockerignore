@@ -1,0 +1,9 @@
+node_modules
+dist
+build_errors.txt
+build_log.txt
+build_output.log
+.gitignore
+README.md
+Dockerfile
+.dockerignore
