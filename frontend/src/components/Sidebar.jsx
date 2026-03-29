@@ -55,7 +55,7 @@ const Sidebar = () => {
           >
             <div className="relative mx-auto lg:mx-0">
               <img
-                src={user.profilePic || "/avatar.png"}
+                src={user.profilePic || user.profilePicture || "/avatar.png"}
                 alt={user.name}
                 className="size-12 object-cover rounded-2xl shadow-sm group-hover:scale-105 transition-transform duration-200"
               />
