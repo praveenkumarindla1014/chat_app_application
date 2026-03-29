@@ -30,3 +30,34 @@ TypeError: Cannot read properties of undefined (reading 'map')
     at file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/middleware/auth.middleware.js:22:3
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
 ====
+
+====
+Error: Invalid email or password
+    at ApiError.badRequest (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/utils/ApiError.js:10:12)
+    at Object.login (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/services/auth.service.js:36:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/controllers/auth.controllers.js:10:16
+====
+
+====
+Error: Invalid email or password
+    at ApiError.badRequest (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/utils/ApiError.js:10:12)
+    at Object.login (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/services/auth.service.js:36:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/controllers/auth.controllers.js:10:16
+====
+
+====
+Error: Invalid email or password
+    at ApiError.badRequest (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/utils/ApiError.js:10:12)
+    at Object.login (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/services/auth.service.js:36:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/controllers/auth.controllers.js:10:16
+====
+
+====
+Error: Invalid email or password
+    at ApiError.badRequest (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/utils/ApiError.js:10:12)
+    at Object.login (file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/services/auth.service.js:41:22)
+    at async file:///C:/Users/prave/OneDrive/Desktop/practise/chat_app/backend/src/controllers/auth.controllers.js:10:16
+====
