@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  PORT: "5002"
+  NODE_ENV: "development"
+  # Connecting to the local MongoDB service inside the cluster
+  MONGODB_URI: "mongodb://mongodb:27017/chat_app"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+type: Opaque
+stringData:
+  # Using stringData allows plain text secrets to be encoded automatically
+  JWT_SECRET: "mysecretkey"
+  CLOUDINARY_CLOUD_NAME: "drfzdw8hn"
+  CLOUDINARY_API_KEY: "539861864292538"
+  CLOUDINARY_API_SECRET: "KNwXEH6GUBT5zfBVSIdbK4t5MCI"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        # Using a custom image built locally inside minikube
+        image: chat-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5002
+        envFrom:
+        - configMapRef:
+            name: backend-config
+        - secretRef:
+            name: backend-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: backend
+spec:
+  ports:
+  - port: 5002
+    targetPort: 5002
+  selector:
+    app: backend
