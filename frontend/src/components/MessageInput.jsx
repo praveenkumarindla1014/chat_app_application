@@ -48,36 +48,47 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-full bg-base-100/50 backdrop-blur-md border-t border-base-300">
       {imagePreview && (
-        <div className="mb-3 flex items-center gap-2">
-          <div className="relative">
+        <div className="mb-4 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="relative group/preview">
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className="size-24 object-cover rounded-2xl border-2 border-primary/20 shadow-md group-hover:scale-105 transition-transform"
             />
             <button
               onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
+              className="absolute -top-2 -right-2 size-6 rounded-full bg-base-300 hover:bg-error hover:text-white
+              flex items-center justify-center transition-colors shadow-lg"
               type="button"
             >
-              <X className="size-3" />
+              <X className="size-4" />
             </button>
           </div>
+          <p className="text-xs text-base-content/50 font-medium italic">Image preview</p>
         </div>
       )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-        <div className="flex-1 flex gap-2">
+      <form onSubmit={handleSendMessage} className="flex items-center gap-3">
+        <div className="flex-1 flex gap-2 bg-base-200/50 rounded-2xl p-1.5 border border-base-300 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+          <button
+            type="button"
+            className={`hidden sm:flex btn btn-ghost btn-circle btn-sm
+                     ${imagePreview ? "text-primary" : "text-base-content/40 hover:text-primary"}`}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image size={20} />
+          </button>
+          
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
+            className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 px-2 text-sm sm:text-base placeholder:text-base-content/30"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+          
           <input
             type="file"
             accept="image/*"
@@ -85,22 +96,14 @@ const MessageInput = () => {
             ref={fileInputRef}
             onChange={handleImageChange}
           />
-
-          <button
-            type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Image size={20} />
-          </button>
         </div>
+        
         <button
           type="submit"
-          className="btn btn-sm btn-circle"
+          className="btn btn-primary btn-circle shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-90 transition-all"
           disabled={!text.trim() && !imagePreview}
         >
-          <Send size={22} />
+          <Send size={20} className="ml-0.5" />
         </button>
       </form>
     </div>
