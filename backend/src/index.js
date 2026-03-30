@@ -62,10 +62,13 @@ app.use("/api/messages", messageRoutes);
 
 // ─── Production Static Files ──────────────────────────────
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  // Works for both Docker (/app/frontend/dist) and local (../frontend/dist)
+  const frontendDist = path.join(__dirname, "frontend", "dist");
+
+  app.use(express.static(frontendDist));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+    res.sendFile(path.join(frontendDist, "index.html"));
   });
 }
 

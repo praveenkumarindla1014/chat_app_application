@@ -1,0 +1,15 @@
+node_modules
+.git
+.gitignore
+*.md
+backend/node_modules
+frontend/node_modules
+frontend/dist
+backend/.env
+backend/error_dump.log
+backend/output.log
+frontend/build_errors.txt
+frontend/build_log.txt
+frontend/build_output.log
+k8s
+docker-compose.yml
