@@ -51,8 +51,8 @@ app.use(
 app.use("/api/", apiLimiter);
 app.use("/api/auth", authLimiter);
 
-// ─── Health Check ─────────────────────────────────────────
-app.get("/", (req, res) => {
+// ─── Health Check (always available at /api/health) ───────
+app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "Chat App API is running" });
 });
 
@@ -62,7 +62,6 @@ app.use("/api/messages", messageRoutes);
 
 // ─── Production Static Files ──────────────────────────────
 if (process.env.NODE_ENV === "production") {
-  // Works for both Docker (/app/frontend/dist) and local (../frontend/dist)
   const frontendDist = path.join(__dirname, "frontend", "dist");
 
   app.use(express.static(frontendDist));
