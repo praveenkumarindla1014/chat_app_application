@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, Zap } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, Zap, Heart, Star, Smile, Bell, Users, Video, Image, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const LoginPage = () => {
@@ -149,18 +149,30 @@ const LoginPage = () => {
           className="relative z-10 text-center max-w-sm"
         >
           <div className="grid grid-cols-3 gap-3 mb-10">
-            {[...Array(9)].map((_, i) => (
+            {[
+              <MessageSquare className="w-8 h-8 text-indigo-400" />,
+              <Heart className="w-8 h-8 text-rose-400" />,
+              <Users className="w-8 h-8 text-violet-400" />,
+              <Video className="w-8 h-8 text-blue-400" />,
+              <Smile className="w-8 h-8 text-emerald-400" />,
+              <Bell className="w-8 h-8 text-amber-400" />,
+              <Image className="w-8 h-8 text-fuchsia-400" />,
+              <Phone className="w-8 h-8 text-cyan-400" />,
+              <Star className="w-8 h-8 text-yellow-400" />
+            ].map((icon, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 200 }}
-                className={`aspect-square rounded-2xl border border-indigo-500/15 flex items-center justify-center
-                  ${i % 3 === 0 ? "bg-indigo-500/10" : i % 3 === 1 ? "bg-violet-500/8" : "bg-blue-500/8"}
+                className={`aspect-square rounded-2xl border flex items-center justify-center
+                  ${i % 3 === 0 ? "bg-indigo-500/15 border-indigo-500/20" : i % 3 === 1 ? "bg-violet-500/15 border-violet-500/20" : "bg-blue-500/15 border-blue-500/20"}
                   ${i % 2 === 0 ? "animate-pulse" : ""}
                 `}
                 style={{ animationDelay: `${i * 0.3}s`, animationDuration: `${2 + (i % 3)}s` }}
-              />
+              >
+                {icon}
+              </motion.div>
             ))}
           </div>
           <h2 className="text-3xl font-extrabold text-white mb-4 tracking-tight">

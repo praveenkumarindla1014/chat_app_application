@@ -19,6 +19,9 @@ import logger from "./utils/logger.js";
 const PORT = process.env.PORT || 5002;
 const __dirname = path.resolve();
 
+// ─── Trust Proxy (Required for Rate Limiting on Render) ────
+app.set("trust proxy", 1);
+
 // ─── Security Middleware ──────────────────────────────────
 app.use(helmet());
 app.use(mongoSanitize()); // Prevent NoSQL injection
