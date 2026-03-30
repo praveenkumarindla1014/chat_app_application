@@ -38,7 +38,8 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5175",
       "http://127.0.0.1:5173",
-      "http://127.0.0.1:5174"
+      "http://127.0.0.1:5174",
+      "https://chat-app-application-1.onrender.com"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -49,6 +50,11 @@ app.use(
 // ─── Rate Limiting ────────────────────────────────────────
 app.use("/api/", apiLimiter);
 app.use("/api/auth", authLimiter);
+
+// ─── Health Check ─────────────────────────────────────────
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Chat App API is running" });
+});
 
 // ─── API Routes ───────────────────────────────────────────
 app.use("/api/auth", authRoutes);
