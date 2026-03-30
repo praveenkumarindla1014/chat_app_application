@@ -1,4 +1,5 @@
 import OnlineIndicator from "./OnlineIndicator";
+import { User as UserIcon } from "lucide-react";
 
 /** Avatar with optional online status dot */
 const Avatar = ({
@@ -26,13 +27,18 @@ const Avatar = ({
 
   return (
     <div className={`relative shrink-0 ${className}`}>
-      <img
-        src={src || "/avatar.png"}
-        alt={alt}
-        className={`${sizeClasses[size]} rounded-2xl object-cover border border-base-300 
-          shadow-sm transition-transform duration-200 hover:scale-105`}
-        loading="lazy"
-      />
+      {src ? (
+        <img
+          src={src}
+          alt={alt}
+          className={`${sizeClasses[size]} rounded-2xl object-cover border border-base-300 shadow-sm transition-transform duration-200 hover:scale-105`}
+          loading="lazy"
+        />
+      ) : (
+        <div className={`${sizeClasses[size]} rounded-2xl border border-base-300 bg-base-200 flex items-center justify-center shadow-sm`}>
+          <UserIcon className="size-1/2 opacity-40 text-base-content" />
+        </div>
+      )}
       {isOnline && (
         <OnlineIndicator
           size={indicatorSize[size]}

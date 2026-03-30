@@ -1,5 +1,6 @@
 import ReadReceipt from "./ReadReceipt";
 import { formatMessageTime } from "../../lib/utils";
+import { User } from "lucide-react";
 
 /** Individual message bubble — sender (right) vs receiver (left) */
 const MessageBubble = ({ message, isSender, showAvatar = true, avatarSrc }) => {
@@ -7,13 +8,17 @@ const MessageBubble = ({ message, isSender, showAvatar = true, avatarSrc }) => {
     <div className={`chat ${isSender ? "chat-end" : "chat-start"} message-enter`}>
       {showAvatar && (
         <div className="chat-image avatar">
-          <div className="size-9 rounded-xl border border-base-300">
-            <img
-              src={avatarSrc || "/avatar.png"}
-              alt="avatar"
-              className="object-cover"
-              loading="lazy"
-            />
+          <div className="size-9 rounded-xl border border-base-300 flex items-center justify-center bg-base-200 overflow-hidden">
+            {avatarSrc ? (
+              <img
+                src={avatarSrc}
+                alt="avatar"
+                className="object-cover w-full h-full"
+                loading="lazy"
+              />
+            ) : (
+              <User className="size-5 opacity-40" />
+            )}
           </div>
         </div>
       )}
