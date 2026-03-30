@@ -27,7 +27,8 @@ app.use(helmet());
 app.use(mongoSanitize()); // Prevent NoSQL injection
 
 // ─── Request Parsing ──────────────────────────────────────
-app.use(express.json({ limit: "5mb" })); // Limit payload size
+app.use(express.json({ limit: "50mb" })); // Allow large image uploads
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
 // ─── Logging ──────────────────────────────────────────────
