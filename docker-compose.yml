@@ -6,6 +6,10 @@ services:
     ports:
       - "5002:5002"
     env_file: ./backend/.env
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/chatapp
+      - NODE_ENV=production
+      - CLIENT_URL=http://localhost
     depends_on:
       - mongodb
     restart: unless-stopped

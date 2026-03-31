@@ -7,8 +7,10 @@ import { ApiError } from "../utils/ApiError.js";
 export const validate = (schema) => (req, res, next) => {
   const result = schema.safeParse(req.body);
   if (!result.success) {
-    const errorList = result.error.issues || result.error.errors || [];
-    const errors = errorList.map ? errorList.map((e) => e.message) : ["Validation failed"];
+    const errorList = result.error?.issues ?? result.error?.errors ?? result.error?.flatten?.()?.formErrors ?? [];
+    const errors = Array.isArray(errorList) && errorList.length > 0
+      ? errorList.map((e) => (typeof e === "string" ? e : e.message))
+      : [result.error?.message || "Validation failed"];
     throw ApiError.badRequest("Validation failed", errors);
   }
   req.body = result.data; // Use the parsed/sanitized data

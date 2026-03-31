@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User, Calendar, Shield, ArrowLeft, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
