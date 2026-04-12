@@ -28,8 +28,15 @@ export const messageService = {
   async sendMessage(senderId, receiverId, { text, image }) {
     let imageUrl;
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image);
-      imageUrl = uploadResponse.secure_url;
+      try {
+        const uploadResponse = await cloudinary.uploader.upload(image, {
+          folder: "chat_app_messages",
+          resource_type: "image",
+        });
+        imageUrl = uploadResponse.secure_url;
+      } catch (error) {
+        throw new Error("Image upload failed: " + (error?.message || "Unknown error"));
+      }
     }
 
     const newMessage = await messageRepository.create({

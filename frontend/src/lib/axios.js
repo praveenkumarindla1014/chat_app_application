@@ -6,7 +6,9 @@ export const axiosInstance = axios.create({
       ? "http://localhost:5002/api"
       : "/api",
   withCredentials: true,
-  timeout: 10000,
+  timeout: 60000, // 60s — needed for large base64 image uploads
+  maxContentLength: 100 * 1024 * 1024, // 100 MB
+  maxBodyLength: 100 * 1024 * 1024,    // 100 MB
 });
 
 // Response interceptor for global error handling

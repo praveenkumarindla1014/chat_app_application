@@ -173,6 +173,8 @@ const Sidebar = () => {
                           src={user.profilePic || user.profilePicture}
                           alt={user.fullName}
                           className="w-full h-full object-cover"
+                          crossOrigin="anonymous"
+                          onError={(e) => { e.currentTarget.style.display = "none"; }}
                         />
                       ) : (
                         user.fullName.charAt(0).toUpperCase()

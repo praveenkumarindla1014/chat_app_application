@@ -78,7 +78,15 @@ const ProfilePage = () => {
                 }}
               >
                 {avatarSrc ? (
-                  <img src={avatarSrc} alt="Profile" className="w-full h-full object-cover" />
+                  <img
+                    src={avatarSrc}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
                 ) : (
                   initials
                 )}

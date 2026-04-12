@@ -23,7 +23,21 @@ const __dirname = path.resolve();
 app.set("trust proxy", 1);
 
 // ─── Security Middleware ──────────────────────────────────
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://*.cloudinary.com"],
+        connectSrc: ["'self'", "wss:", "ws:", "https://res.cloudinary.com", "https://*.cloudinary.com"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+  })
+);
 app.use(mongoSanitize()); // Prevent NoSQL injection
 
 // ─── Request Parsing ──────────────────────────────────────

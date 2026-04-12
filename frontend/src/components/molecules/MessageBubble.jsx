@@ -15,6 +15,8 @@ const MessageBubble = ({ message, isSender, showAvatar = true, avatarSrc }) => {
                 alt="avatar"
                 className="object-cover w-full h-full"
                 loading="lazy"
+                crossOrigin="anonymous"
+                onError={(e) => { e.currentTarget.style.display = "none"; }}
               />
             ) : (
               <User className="size-5 opacity-40" />
@@ -44,6 +46,11 @@ const MessageBubble = ({ message, isSender, showAvatar = true, avatarSrc }) => {
             alt="Attachment"
             className="rounded-xl mb-2 max-w-[250px] shadow-md cursor-pointer hover:opacity-90 transition-opacity"
             loading="lazy"
+            crossOrigin="anonymous"
+            onError={(e) => {
+              e.currentTarget.alt = "Image failed to load";
+              e.currentTarget.style.opacity = "0.4";
+            }}
           />
         )}
         {message.text && (
